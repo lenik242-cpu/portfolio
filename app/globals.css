@@ -1,0 +1,795 @@
+@import "tailwindcss";
+
+/* ---- Thème (Tailwind v4) — V4 « Material in Motion » ---------------- */
+@theme {
+  --color-background: #08090d; /* obsidienne */
+  --color-background-2: #10131a; /* fond secondaire (verre fumé) */
+  --color-foreground: #f1f2f4; /* texte principal */
+  --color-muted: #8a909a; /* texte secondaire */
+
+  --color-accent: #4c7dff; /* bleu froid — accent */
+  --color-accent-blue: #8f7cff; /* lavande — très rare */
+  --color-platinum: #c9d1e0; /* argent / platine (matière) */
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-serif: var(--font-serif-display);
+
+  --animate-scroll-hint: scroll-hint 1.8s ease-in-out infinite;
+  @keyframes scroll-hint {
+    0% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    70% {
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(14px);
+      opacity: 0;
+    }
+  }
+}
+
+/* Dégradé de marque réutilisé partout (texte, boutons, accents). */
+:root {
+  --gradient-brand: linear-gradient(
+    120deg,
+    #3f63d8 0%,
+    #4c7dff 55%,
+    #8f7cff 100%
+  );
+  /* dégradé « chrome froid » : platine → blanc froid → bleu discret */
+  --gradient-chrome: linear-gradient(
+    135deg,
+    #aeb8cc 0%,
+    #f1f2f4 46%,
+    #7f93c8 100%
+  );
+}
+
+/* ---- Base ------------------------------------------------------------- */
+html {
+  scroll-behavior: auto; /* le smooth scroll est géré par Lenis */
+}
+
+body {
+  /* Obsidienne + très léger halo froid vers le fond secondaire (sobre) */
+  background:
+    radial-gradient(
+      120% 80% at 50% -12%,
+      rgba(40, 56, 110, 0.22),
+      transparent 60%
+    ),
+    radial-gradient(100% 70% at 50% 120%, #10131a, transparent 62%),
+    var(--color-background);
+  background-attachment: fixed;
+  color: var(--color-foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+/* Display grotesk sur les titres */
+h1,
+h2,
+h3,
+.font-display {
+  font-family: var(--font-display), var(--font-sans), sans-serif;
+  letter-spacing: -0.02em;
+}
+
+/* Accent serif éditorial (mots-clés en italique) */
+.font-serif {
+  font-family: var(--font-serif), Georgia, "Times New Roman", serif;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+::selection {
+  background: rgba(124, 156, 255, 0.32);
+}
+
+/* Entrée cinématique de page (fondu + montée + net). Pas de fill-mode
+   « forwards » → aucun transform/filter résiduel (préserve les pins). */
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+.page-enter {
+  animation: page-enter 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .page-enter {
+    animation: none;
+  }
+}
+
+/* Barre de progression de scroll (pilotée par Lenis) */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  z-index: 60;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  background: var(--gradient-brand);
+  box-shadow: 0 0 12px rgba(124, 156, 255, 0.6);
+  pointer-events: none;
+}
+
+/* ---- Menu plein écran : matière LIQUID GLASS ------------------------- */
+.menu-overlay {
+  background: rgba(5, 7, 14, 0.62);
+  backdrop-filter: blur(30px) saturate(135%) brightness(1.02);
+  -webkit-backdrop-filter: blur(30px) saturate(135%) brightness(1.02);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.55s cubic-bezier(0.2, 0.7, 0.2, 1),
+    visibility 0.55s;
+}
+.menu-overlay[data-open="true"] {
+  opacity: 1;
+  visibility: visible;
+}
+/* réfraction réelle de la page derrière (la surface se matérialise) */
+@supports (backdrop-filter: url("#a")) or (-webkit-backdrop-filter: url("#a")) {
+  .menu-overlay {
+    backdrop-filter: url(#liquid-glass) blur(26px) saturate(135%);
+    -webkit-backdrop-filter: url(#liquid-glass) blur(26px) saturate(135%);
+  }
+}
+/* profondeur : lumière interne haute + arête */
+.menu-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    75% 55% at 50% -5%,
+    rgba(233, 231, 223, 0.06),
+    transparent 60%
+  );
+  box-shadow: inset 0 1px 0 rgba(233, 231, 223, 0.08);
+}
+
+.menu-link,
+.menu-foot {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.6s cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.menu-foot {
+  transform: translateY(16px);
+}
+.menu-overlay[data-open="true"] .menu-link,
+.menu-overlay[data-open="true"] .menu-foot {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .menu-link,
+  .menu-foot {
+    transform: none;
+  }
+}
+
+/* ---- Atmosphère interactive (composant Background) ------------------- */
+/* Lueur qui suit le curseur */
+.bg-cursor-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    560px circle at var(--mx, 50%) var(--my, 32%),
+    rgba(124, 156, 255, 0.12),
+    transparent 62%
+  );
+}
+
+/* Pool lumineux central (scrim derrière le hero) */
+.bg-hero-pool {
+  position: absolute;
+  left: 50%;
+  top: 34%;
+  width: min(1100px, 92vw);
+  height: min(620px, 68vh);
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    60% 55% at 50% 50%,
+    rgba(120, 140, 220, 0.16) 0%,
+    transparent 72%
+  );
+  filter: blur(20px);
+}
+
+/* ---- Décor de fond (composant Background) ---------------------------- */
+.aurora {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(160px);
+  will-change: transform;
+}
+.aurora--violet {
+  width: 55vmax;
+  height: 55vmax;
+  left: -12vmax;
+  top: -18vmax;
+  opacity: 0.14;
+  background: radial-gradient(circle at center, #4a6bd0, transparent 70%);
+  animation: drift-1 28s ease-in-out infinite;
+}
+.aurora--blue {
+  width: 50vmax;
+  height: 50vmax;
+  right: -14vmax;
+  top: 8vmax;
+  opacity: 0.12;
+  background: radial-gradient(circle at center, #7c6cc8, transparent 70%);
+  animation: drift-2 34s ease-in-out infinite;
+}
+.aurora--indigo {
+  width: 46vmax;
+  height: 46vmax;
+  left: 18vmax;
+  bottom: -22vmax;
+  opacity: 0.1;
+  background: radial-gradient(circle at center, #35508f, transparent 70%);
+  animation: drift-3 31s ease-in-out infinite;
+}
+@keyframes drift-1 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(8%, 6%) scale(1.12);
+  }
+}
+@keyframes drift-2 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-9%, 8%) scale(1.15);
+  }
+}
+@keyframes drift-3 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(6%, -7%) scale(1.1);
+  }
+}
+
+/* Grille technique estompée */
+.bg-grid {
+  background-image:
+    linear-gradient(to right, rgba(180, 220, 215, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(180, 220, 215, 0.05) 1px, transparent 1px);
+  background-size: 60px 60px;
+  -webkit-mask-image: radial-gradient(
+    ellipse 90% 70% at 50% 18%,
+    #000 28%,
+    transparent 76%
+  );
+  mask-image: radial-gradient(
+    ellipse 90% 70% at 50% 18%,
+    #000 28%,
+    transparent 76%
+  );
+}
+
+/* Grain fin (SVG inline) */
+.bg-grain {
+  opacity: 0.05;
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Vignette */
+.bg-vignette {
+  background: radial-gradient(
+    ellipse 100% 100% at 50% 38%,
+    transparent 55%,
+    rgba(0, 0, 0, 0.55) 100%
+  );
+}
+
+/* ---- Utilitaires visuels --------------------------------------------- */
+.text-gradient {
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Signature « chrome » : dégradé platine froid (footer, gros titres). */
+.text-chrome {
+  background: var(--gradient-chrome);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Render du hero : léger « souffle » d'échelle, très lent. */
+@keyframes hero-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.022);
+  }
+}
+.hero-breathe {
+  animation: hero-breathe 14s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-breathe {
+    animation: none;
+  }
+}
+
+/* ---- Dégradés statiques (classes plutôt que style inline) -----------
+   Les dégradés fixes vivent ici plutôt qu'en style={{}} : une extension
+   navigateur (ex. Dark Reader) réécrit les attributs style inline avant
+   l'hydratation React, ce qui déclenche un faux positif d'hydratation à
+   chaque chargement. Une règle CSS n'est pas concernée de la même façon. */
+.intro-trace {
+  background-image: linear-gradient(
+    to right,
+    transparent,
+    rgba(76, 125, 255, 0.9),
+    transparent
+  );
+}
+
+.hero-scrim {
+  background-image:
+    linear-gradient(
+      90deg,
+      rgba(8, 9, 13, 0.85) 0%,
+      rgba(8, 9, 13, 0.5) 42%,
+      rgba(8, 9, 13, 0.12) 68%,
+      rgba(8, 9, 13, 0.3) 100%
+    ),
+    linear-gradient(0deg, rgba(8, 9, 13, 0.55) 0%, transparent 42%);
+}
+
+.radial-glow-bg {
+  background-image: radial-gradient(
+    140% 100% at 50% 0%,
+    #05070e 35%,
+    #2f1c5c 100%
+  );
+}
+
+.section-fade-top {
+  background-image: linear-gradient(to bottom, var(--color-background), transparent);
+}
+
+.section-fade-bottom {
+  background-image: linear-gradient(to top, var(--color-background), transparent);
+}
+
+.hero-intro-glow {
+  background-image: radial-gradient(
+    circle,
+    rgba(214, 226, 255, 0.24),
+    rgba(150, 168, 230, 0.1) 34%,
+    transparent 68%
+  );
+}
+
+.hero-intro-sweep {
+  background-image: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(220, 232, 255, 0.6),
+    transparent
+  );
+}
+
+/* Contact : lueur obsidienne statique, aucun mouvement — juste pour que le
+   bas de section (vers le footer) ne se sente pas vide. Un seul accent
+   bleu, très faible, jamais un glow permanent au sens décoratif. */
+.contact-glow {
+  background-image: radial-gradient(
+    55% 60% at 50% 62%,
+    rgba(76, 125, 255, 0.1),
+    transparent 72%
+  );
+}
+
+/* Marques SVG des services (ServiceMark) — fill/stroke en classe plutôt
+   qu'en attribut : Dark Reader réécrit fill=/stroke= inline avant
+   l'hydratation React (même raison que les dégradés ci-dessus). */
+.mark-stroke {
+  fill: none;
+  stroke: currentColor;
+}
+.mark-fill {
+  fill: currentColor;
+  stroke: none;
+}
+
+/* Accent dynamique par service (Services.tsx) : la couleur passe par une
+   variable CSS plutôt qu'un style={{color}} direct, pour la même raison
+   (Dark Reader réécrit `color` inline mais ignore les custom properties). */
+.service-accent {
+  color: var(--service-accent);
+}
+
+/* ---- Liquid Metal Button (CTA principaux uniquement) ----------------- */
+.metal-btn {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.6rem;
+  border-radius: 9999px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--color-foreground);
+  background:
+    linear-gradient(115deg, transparent 42%, rgba(201, 214, 240, 0.08) 50%, transparent 58%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0) 44%),
+    linear-gradient(180deg, #232838, #0d1017);
+  border: 1px solid rgba(201, 209, 224, 0.32);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -12px 24px -18px rgba(0, 0, 0, 0.6),
+    0 8px 30px -14px rgba(0, 0, 0, 0.7);
+  transition:
+    transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1),
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+.metal-btn::before {
+  /* balayage spéculaire (verre fumé / métal froid) */
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: linear-gradient(
+    115deg,
+    transparent 28%,
+    rgba(224, 234, 255, 0.42) 48%,
+    transparent 64%
+  );
+  transform: translateX(-120%);
+  transition: transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.metal-btn:hover,
+.metal-btn:focus-visible {
+  transform: translateY(-1px);
+  border-color: rgba(76, 125, 255, 0.5);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 12px 36px -14px rgba(76, 125, 255, 0.35),
+    0 8px 30px -16px rgba(0, 0, 0, 0.7);
+}
+.metal-btn:hover::before,
+.metal-btn:focus-visible::before {
+  transform: translateX(120%);
+}
+.metal-btn:focus-visible {
+  outline: 2px solid rgba(76, 125, 255, 0.65);
+  outline-offset: 3px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .metal-btn,
+  .metal-btn::before {
+    transition: border-color 0.2s ease;
+  }
+  .metal-btn:hover::before,
+  .metal-btn:focus-visible::before {
+    transform: translateX(-120%);
+  }
+}
+
+/* Bouton flottant Kairon — même matière que .metal-btn (métal froid /
+   verre fumé), en variante circulaire. */
+.kairon-fab {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  color: var(--color-foreground);
+  background:
+    linear-gradient(115deg, transparent 42%, rgba(201, 214, 240, 0.08) 50%, transparent 58%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0) 44%),
+    linear-gradient(180deg, #232838, #0d1017);
+  border: 1px solid rgba(201, 209, 224, 0.32);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -12px 24px -18px rgba(0, 0, 0, 0.6),
+    0 8px 30px -14px rgba(0, 0, 0, 0.7);
+  transition:
+    transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1),
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+.kairon-fab::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: linear-gradient(
+    115deg,
+    transparent 28%,
+    rgba(224, 234, 255, 0.42) 48%,
+    transparent 64%
+  );
+  transform: translateX(-120%);
+  transition: transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.kairon-fab:hover,
+.kairon-fab:focus-visible {
+  transform: translateY(-2px);
+  border-color: rgba(76, 125, 255, 0.5);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 12px 36px -14px rgba(76, 125, 255, 0.45),
+    0 8px 30px -16px rgba(0, 0, 0, 0.7);
+}
+.kairon-fab:hover::before,
+.kairon-fab:focus-visible::before {
+  transform: translateX(120%);
+}
+.kairon-fab:focus-visible {
+  outline: 2px solid rgba(76, 125, 255, 0.65);
+  outline-offset: 3px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .kairon-fab,
+  .kairon-fab::before {
+    transition: border-color 0.2s ease;
+  }
+  .kairon-fab:hover::before,
+  .kairon-fab:focus-visible::before {
+    transform: translateX(-120%);
+  }
+}
+
+/* Bouton principal — dégradé de marque + halo doux */
+.btn-primary {
+  color: #080d1c;
+  font-weight: 600;
+  background: var(--gradient-brand);
+  background-size: 200% 200%;
+  background-position: 0% 50%;
+  box-shadow:
+    0 10px 34px -10px rgba(124, 156, 255, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    background-position 0.6s ease;
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  background-position: 100% 50%;
+  box-shadow:
+    0 16px 44px -10px rgba(124, 156, 255, 0.8),
+    inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+
+/* ---- Liquid glass ---------------------------------------------------- */
+.glass-panel,
+.glass-pill {
+  /* Verre liquide multi-couches : sheen diagonal + flou + arête lumineuse */
+  background:
+    linear-gradient(
+      135deg,
+      rgba(224, 232, 246, 0.1),
+      rgba(224, 232, 246, 0.02) 58%
+    ),
+    rgba(210, 222, 244, 0.04);
+  backdrop-filter: blur(18px) saturate(150%) brightness(1.04);
+  -webkit-backdrop-filter: blur(18px) saturate(150%) brightness(1.04);
+  border: 1px solid rgba(220, 230, 248, 0.12);
+  box-shadow:
+    0 12px 44px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.03),
+    inset 0 -14px 30px -18px rgba(0, 0, 0, 0.5);
+}
+
+.glass-pill {
+  background: rgba(124, 156, 255, 0.18);
+  border-color: rgba(184, 166, 255, 0.32);
+  box-shadow:
+    0 2px 14px rgba(124, 156, 255, 0.2),
+    inset 0 1px 0 rgba(235, 240, 255, 0.2);
+}
+
+.glass-panel[data-scrolled="true"] {
+  background: rgba(210, 222, 244, 0.08);
+}
+
+/* Liquid glass avancé — reflet spéculaire qui suit le curseur. */
+.glass-liquid {
+  position: relative;
+  isolation: isolate;
+}
+.glass-liquid::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(
+    150px circle at var(--glx, 50%) var(--gly, 0%),
+    rgba(220, 232, 255, 0.28),
+    rgba(220, 232, 255, 0) 60%
+  );
+  opacity: var(--glare, 0);
+  transition: opacity 0.4s ease;
+  z-index: -1;
+}
+/* Sheen Apple : reflet supérieur brillant + arête lumineuse interne. */
+.glass-liquid::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: -1;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.18),
+    rgba(255, 255, 255, 0) 36%
+  );
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.32),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.06),
+    inset 0 -20px 40px -26px rgba(0, 0, 0, 0.55);
+}
+
+/* Réfraction « verre liquide » (filtre SVG dans backdrop-filter). */
+@supports (backdrop-filter: url("#a")) or
+  (-webkit-backdrop-filter: url("#a")) {
+  .glass-refract {
+    backdrop-filter: url(#liquid-glass) blur(3px) saturate(170%)
+      brightness(1.05);
+    -webkit-backdrop-filter: url(#liquid-glass) blur(3px) saturate(170%)
+      brightness(1.05);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+/* ---- Curseur contextuel --------------------------------------------- */
+/* Masque le curseur natif uniquement quand le nôtre est actif (pointeur fin). */
+.has-custom-cursor,
+.has-custom-cursor * {
+  cursor: none !important;
+}
+
+.cursor-dot,
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  pointer-events: none;
+  will-change: transform;
+  /* centrage sur la pointe */
+  margin-left: 0;
+  margin-top: 0;
+}
+/* n'existent que si le curseur custom est monté */
+html:not(.has-custom-cursor) .cursor-dot,
+html:not(.has-custom-cursor) .cursor-ring {
+  display: none;
+}
+
+.cursor-dot {
+  width: 5px;
+  height: 5px;
+  margin: -2.5px 0 0 -2.5px;
+  border-radius: 9999px;
+  background: var(--color-foreground);
+  transition:
+    opacity 0.25s ease,
+    background 0.25s ease;
+}
+
+.cursor-ring {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  margin: -17px 0 0 -17px;
+  border-radius: 9999px;
+  border: 1px solid rgba(233, 231, 223, 0.4);
+  transition:
+    width 0.32s cubic-bezier(0.2, 0.7, 0.2, 1),
+    height 0.32s cubic-bezier(0.2, 0.7, 0.2, 1),
+    margin 0.32s cubic-bezier(0.2, 0.7, 0.2, 1),
+    border-color 0.32s ease,
+    background 0.32s ease,
+    opacity 0.3s ease;
+}
+.cursor-ring.is-down {
+  transform: translate3d(var(--x, 0), var(--y, 0), 0);
+  border-color: var(--color-accent);
+}
+.cursor-ring.is-hidden {
+  opacity: 0;
+}
+
+/* Projet / image : disque « VIEW » / « OPEN » */
+.cursor-ring[data-state="view"],
+.cursor-ring[data-state="open"] {
+  width: 74px;
+  height: 74px;
+  margin: -37px 0 0 -37px;
+  border-color: transparent;
+  background: rgba(124, 156, 255, 0.18);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+.cursor-dot[data-state="view"],
+.cursor-dot[data-state="open"] {
+  opacity: 0;
+}
+.cursor-label {
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  color: var(--color-foreground);
+  opacity: 0;
+  transform: scale(0.8);
+  transition:
+    opacity 0.28s ease,
+    transform 0.28s ease;
+}
+.cursor-ring[data-state="view"] .cursor-label,
+.cursor-ring[data-state="open"] .cursor-label {
+  opacity: 0.9;
+  transform: scale(1);
+}
+
+/* Le curseur custom n'est jamais montré sur tactile. */
+@media (pointer: coarse) {
+  .cursor-dot,
+  .cursor-ring {
+    display: none !important;
+  }
+}
+/* Pendant la séquence d'ouverture, le curseur s'efface. */
+.intro-active .cursor-dot,
+.intro-active .cursor-ring {
+  opacity: 0 !important;
+}
