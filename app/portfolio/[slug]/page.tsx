@@ -71,10 +71,12 @@ export default async function ProjectPage({
 
         {/* Galerie animée */}
         <div className="flex flex-col gap-8">
-          {project.images.map((src, i) => (
+          {project.images.map((image, i) => (
             <ParallaxImage
-              key={src}
-              src={src}
+              key={image.src}
+              src={image.src}
+              width={image.width}
+              height={image.height}
               alt={`${project.title}, visuel ${i + 1}`}
               priority={i === 0}
             />

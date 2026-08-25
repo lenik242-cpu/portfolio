@@ -2,24 +2,36 @@
 
 import { useEffect, useRef } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { useLenis } from "@/components/providers/SmoothScrollProvider";
 
 /**
  * Image de galerie animée : révélation (wipe vertical + léger zoom) à l'entrée
  * dans le viewport, puis parallax doux au scroll. Pensé pour rester élégant et
  * discret (pas de crop : l'image garde son ratio naturel).
+ *
+ * `width`/`height` réservent l'espace réel AVANT le chargement (l'image est
+ * `loading="lazy"` sauf la première) : sans ça, la hauteur du document grandit
+ * pendant que l'utilisateur scrolle et déphase Lenis/ScrollTrigger — la page
+ * peut sembler bloquée avant sa vraie fin (plus visible sur les galeries à
+ * images hautes). `onLoad` déclenche un second filet de sécurité.
  */
 export default function ParallaxImage({
   src,
   alt,
+  width,
+  height,
   priority = false,
 }: {
   src: string;
   alt: string;
+  width: number;
+  height: number;
   priority?: boolean;
 }) {
   const outer = useRef<HTMLDivElement>(null);
   const frame = useRef<HTMLDivElement>(null);
   const img = useRef<HTMLImageElement>(null);
+  const { lenis } = useLenis();
 
   useEffect(() => {
     const o = outer.current;
@@ -90,7 +102,16 @@ export default function ParallaxImage({
           ref={img}
           src={src}
           alt={alt}
+          width={width}
+          height={height}
           loading={priority ? "eager" : "lazy"}
+          onLoad={() => {
+            // Filet de sécurité : même avec l'espace réservé, on recale
+            // Lenis/ScrollTrigger si jamais une image finit de charger après
+            // leur dernière mesure (connexion lente, cache froid, etc.).
+            lenis?.resize();
+            ScrollTrigger.refresh();
+          }}
           className="mx-auto block h-auto w-full"
         />
       </div>

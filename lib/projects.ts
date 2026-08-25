@@ -9,6 +9,18 @@ export type Category =
   | "Produit / e-commerce"
   | "Environnements";
 
+// Dimensions réelles du fichier (largeur/hauteur intrinsèques) — réservent
+// l'espace de la galerie AVANT que l'image (lazy) ne charge. Sans ça, la
+// hauteur réelle de la page grandit pendant le scroll (chaque image lazy qui
+// charge agrandit le document) et déphase Lenis/ScrollTrigger : la page
+// semble bloquée avant sa vraie fin. Plus la galerie contient d'images
+// hautes, plus l'écart est perceptible (cas du parfum, 3 images portrait).
+export interface GalleryImage {
+  src: string;
+  width: number;
+  height: number;
+}
+
 export interface Project {
   slug: string;
   title: string;
@@ -18,7 +30,7 @@ export interface Project {
   summary: string; // phrase courte (carte / méta)
   description: string; // paragraphe (page projet)
   hero: string; // vignette, ex: "/projects/xbox-hero.webp"
-  images: string[]; // galerie (page projet)
+  images: GalleryImage[]; // galerie (page projet)
   featured?: boolean;
 }
 
@@ -34,11 +46,11 @@ export const PROJECTS: Project[] = [
       "Modélisation et rendu produit de la manette Xbox Elite Series 2 et de la console Series X. Travail hard-surface détaillé, matériaux PBR (plastiques, métaux, grip), éclairage studio et compositing sous Nuke.",
     hero: "/projects/xbox-hero.webp",
     images: [
-      "/projects/xbox-hero.webp",
-      "/projects/xbox-02.webp",
-      "/projects/xbox-03.webp",
-      "/projects/xbox-04.webp",
-      "/projects/xbox-05.webp",
+      { src: "/projects/xbox-hero.webp", width: 2000, height: 2000 },
+      { src: "/projects/xbox-02.webp", width: 2000, height: 2000 },
+      { src: "/projects/xbox-03.webp", width: 2000, height: 2000 },
+      { src: "/projects/xbox-04.webp", width: 1125, height: 2000 },
+      { src: "/projects/xbox-05.webp", width: 2000, height: 2000 },
     ],
     featured: true,
   },
@@ -53,10 +65,10 @@ export const PROJECTS: Project[] = [
       "MacBook Pro 14 pouces modélisé et rendu en studio : hard-surface précis, matériaux (aluminium, écran, clavier) et vues éclatées. Une passe wireframe met en avant la topologie.",
     hero: "/projects/mac-hero.webp",
     images: [
-      "/projects/mac-hero.webp",
-      "/projects/mac-02.webp",
-      "/projects/mac-wire.webp",
-      "/projects/mac-wire2.webp",
+      { src: "/projects/mac-hero.webp", width: 1333, height: 2000 },
+      { src: "/projects/mac-02.webp", width: 2000, height: 2000 },
+      { src: "/projects/mac-wire.webp", width: 1333, height: 2000 },
+      { src: "/projects/mac-wire2.webp", width: 2000, height: 2000 },
     ],
     featured: true,
   },
@@ -71,11 +83,11 @@ export const PROJECTS: Project[] = [
       "Flacon Dior Sauvage (Eau de Parfum) recréé en 3D : modélisation précise, matériaux verre / métal / liquide et rendu packshot photoréaliste sous V-Ray. Une passe wireframe montre la topologie.",
     hero: "/projects/parfum-cap.webp",
     images: [
-      "/projects/parfum-pedestal.webp",
-      "/projects/parfum-float.webp",
-      "/projects/parfum-cap.webp",
-      "/projects/parfum-spray.webp",
-      "/projects/parfum-wire.webp",
+      { src: "/projects/parfum-pedestal.webp", width: 736, height: 1308 },
+      { src: "/projects/parfum-float.webp", width: 736, height: 1308 },
+      { src: "/projects/parfum-cap.webp", width: 2000, height: 2000 },
+      { src: "/projects/parfum-spray.webp", width: 2000, height: 2000 },
+      { src: "/projects/parfum-wire.webp", width: 736, height: 1308 },
     ],
     featured: true,
   },
@@ -90,10 +102,10 @@ export const PROJECTS: Project[] = [
       "Recréation en 3D de la guitare d'Ellie dans The Last of Us Part II : corps acoustique sunburst, gravure fougère & papillon sur la table et incrustation papillon sur le manche. Modélisation, texturing bois et rendu, avec passe wireframe.",
     hero: "/projects/guitare-body.webp",
     images: [
-      "/projects/guitare-body.webp",
-      "/projects/guitare-neck.webp",
-      "/projects/guitare-back.webp",
-      "/projects/guitare-wire.webp",
+      { src: "/projects/guitare-body.webp", width: 826, height: 901 },
+      { src: "/projects/guitare-neck.webp", width: 838, height: 868 },
+      { src: "/projects/guitare-back.webp", width: 969, height: 919 },
+      { src: "/projects/guitare-wire.webp", width: 2000, height: 2000 },
     ],
     featured: true,
   },
