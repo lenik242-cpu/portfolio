@@ -52,11 +52,18 @@ export default function FloatingNav() {
         <button
           type="button"
           onClick={() => go("hero")}
-          className="pointer-events-auto inline-flex items-center gap-2.5 text-sm font-semibold uppercase tracking-[0.22em] text-foreground/90 transition-colors hover:text-foreground"
+          aria-label={`${SITE.brand} — retour à l'accueil`}
+          className="pointer-events-auto inline-flex items-center transition-opacity hover:opacity-80"
           data-cursor="link"
         >
-          <span className="inline-block h-[5px] w-[5px] rounded-full bg-accent shadow-[0_0_8px_var(--color-accent)]" />
-          {SITE.brand}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/logo.png"
+            alt={SITE.brand}
+            width={48}
+            height={32}
+            className="h-8 w-auto sm:h-9"
+          />
         </button>
 
         <button
