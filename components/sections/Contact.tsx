@@ -32,7 +32,7 @@ export default function Contact() {
             </LiquidMetalButton>
           </div>
 
-          <div className="mt-8 flex gap-8 text-sm text-muted">
+          <div className="mt-8 flex flex-wrap justify-center gap-x-8 gap-y-3 text-sm text-muted">
             {SITE.socials.map((s) => (
               <a
                 key={s.label}

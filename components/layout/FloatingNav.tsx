@@ -52,18 +52,11 @@ export default function FloatingNav() {
         <button
           type="button"
           onClick={() => go("hero")}
-          aria-label={`${SITE.brand} — retour à l'accueil`}
-          className="pointer-events-auto inline-flex items-center transition-opacity hover:opacity-80"
+          className="pointer-events-auto -my-3 inline-flex items-center gap-2.5 py-3 text-xs font-medium uppercase tracking-[0.24em] text-foreground/70 transition-colors hover:text-foreground"
           data-cursor="link"
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/logo.png"
-            alt={SITE.brand}
-            width={48}
-            height={32}
-            className="h-8 w-auto sm:h-9"
-          />
+          <span className="inline-block h-[5px] w-[5px] rounded-full bg-accent shadow-[0_0_8px_var(--color-accent)]" />
+          {SITE.brand}
         </button>
 
         <button
@@ -71,7 +64,7 @@ export default function FloatingNav() {
           onClick={() => setOpen((o) => !o)}
           aria-expanded={open}
           aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
-          className="pointer-events-auto text-xs font-medium uppercase tracking-[0.24em] text-foreground/70 transition-colors hover:text-foreground"
+          className="pointer-events-auto -my-3 py-3 text-xs font-medium uppercase tracking-[0.24em] text-foreground/70 transition-colors hover:text-foreground"
           data-cursor="link"
         >
           {open ? "Fermer" : "Menu"}

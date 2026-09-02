@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import Intro from "@/components/sections/Intro";
 import LiquidMetalButton from "@/components/ui/LiquidMetalButton";
 import { gsap } from "@/lib/gsap";
 
@@ -60,8 +59,6 @@ export default function Hero() {
 
   return (
     <section id="hero" ref={root} className="relative min-h-[100dvh] overflow-hidden">
-      <Intro />
-
       {/* Rendu 3D héros : vidéo bouclée plein cadre */}
       <div className="absolute inset-0 z-0 overflow-hidden bg-[#08090d]">
         <video
@@ -89,8 +86,15 @@ export default function Hero() {
         <div className="mx-auto w-full max-w-7xl px-8 sm:px-10">
           <div className="flex max-w-xl flex-col gap-5">
             <div className="overflow-hidden pb-1">
-              <h1 className="hero-line text-5xl font-medium leading-[0.98] tracking-tight sm:text-6xl md:text-7xl">
-                Nikita Resta
+              <h1 className="hero-line">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/logo.png"
+                  alt="Nikita Resta"
+                  width={384}
+                  height={256}
+                  className="h-auto w-36 sm:w-44 md:w-52 lg:w-60"
+                />
               </h1>
             </div>
             <div className="overflow-hidden">

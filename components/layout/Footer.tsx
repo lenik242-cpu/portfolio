@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Link from "next/link";
 import { gsap } from "@/lib/gsap";
 import { SITE } from "@/lib/site";
 
@@ -98,10 +99,24 @@ export default function Footer() {
           </h2>
         </div>
 
-        <div className="flex flex-col gap-2 py-10 text-xs text-foreground/35 sm:flex-row sm:items-center sm:justify-between">
-          <span>
-            © {new Date().getFullYear()} · {SITE.role}
-          </span>
+        <div className="flex flex-col gap-3 py-10 text-xs text-foreground/35 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+            <span>
+              © {new Date().getFullYear()} · {SITE.role}
+            </span>
+            <span aria-hidden className="text-foreground/15">
+              ·
+            </span>
+            <Link href="/mentions-legales" className="transition-colors hover:text-foreground/70">
+              Mentions légales
+            </Link>
+            <span aria-hidden className="text-foreground/15">
+              ·
+            </span>
+            <Link href="/confidentialite" className="transition-colors hover:text-foreground/70">
+              Confidentialité
+            </Link>
+          </div>
           <span className="font-mono uppercase tracking-[0.2em]">
             Conçu &amp; développé par {SITE.brand}
           </span>

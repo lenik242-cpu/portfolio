@@ -134,7 +134,7 @@ export default function KaironWidget() {
                 onClick={() => setOpen(false)}
                 aria-label="Fermer"
                 data-cursor="link"
-                className="text-muted transition-colors hover:text-foreground"
+                className="-m-2 p-2 text-muted transition-colors hover:text-foreground"
               >
                 <CloseIcon size={16} />
               </button>
@@ -219,10 +219,10 @@ function TypingDot({ delay }: { delay: number }) {
 
 function ChatIcon() {
   return (
-    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true">
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
       <path
+        className="mark-stroke"
         d="M4 5.5C4 4.67 4.67 4 5.5 4h13c.83 0 1.5.67 1.5 1.5v9c0 .83-.67 1.5-1.5 1.5H9l-4 4v-4H5.5C4.67 16 4 15.33 4 14.5v-9Z"
-        stroke="currentColor"
         strokeWidth="1.4"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -233,18 +233,23 @@ function ChatIcon() {
 
 function CloseIcon({ size = 20 }: { size?: number }) {
   return (
-    <svg viewBox="0 0 24 24" width={size} height={size} fill="none" aria-hidden="true">
-      <path d="M5 5L19 19M19 5L5 19" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    <svg viewBox="0 0 24 24" width={size} height={size} aria-hidden="true">
+      <path
+        className="mark-stroke"
+        d="M5 5L19 19M19 5L5 19"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
 
 function SendIcon() {
   return (
-    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" aria-hidden="true">
+    <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true">
       <path
+        className="mark-stroke"
         d="M4 12L20 4L13 20L11 13L4 12Z"
-        stroke="currentColor"
         strokeWidth="1.4"
         strokeLinecap="round"
         strokeLinejoin="round"

@@ -51,9 +51,11 @@
 /* ---- Base ------------------------------------------------------------- */
 html {
   scroll-behavior: auto; /* le smooth scroll est géré par Lenis */
+  overflow-x: hidden; /* filet de sécurité : aucun débordement horizontal, même si un élément d'une section future déborde par erreur */
 }
 
 body {
+  overflow-x: hidden;
   /* Obsidienne + très léger halo froid vers le fond secondaire (sobre) */
   background:
     radial-gradient(

@@ -42,6 +42,12 @@ export default function CustomCursor() {
       tx = e.clientX;
       ty = e.clientY;
       dot.style.transform = `translate3d(${tx}px, ${ty}px, 0)`;
+      // Auto-réparant : si le pointeur bouge, il est forcément dans la
+      // fenêtre — annule tout `is-hidden` resté bloqué suite à un
+      // pointerleave/pointerenter fantôme sur `document` (des animations
+      // CSS transform continues, comme le carousel/zoom de la section Web
+      // experiences, peuvent en déclencher sans événement inverse associé).
+      ring.classList.remove("is-hidden");
       const next = resolveState(e.target as Element);
       if (next !== state) {
         state = next;
