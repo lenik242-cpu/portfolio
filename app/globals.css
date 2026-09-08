@@ -143,13 +143,12 @@ h3,
   opacity: 1;
   visibility: visible;
 }
-/* réfraction réelle de la page derrière (la surface se matérialise) */
-@supports (backdrop-filter: url("#a")) or (-webkit-backdrop-filter: url("#a")) {
-  .menu-overlay {
-    backdrop-filter: url(#liquid-glass) blur(26px) saturate(135%);
-    -webkit-backdrop-filter: url(#liquid-glass) blur(26px) saturate(135%);
-  }
-}
+/* Note : pas de filtre SVG (#liquid-glass) ici, volontairement. Sur un
+   panneau plein écran, ce filtre (feTurbulence + feDisplacementMap) doit
+   échantillonner tout le viewport à chaque frame — très coûteux, et son
+   support réel de backdrop-filter+url() est incohérent entre navigateurs
+   (le flou entier peut être silencieusement ignoré). Le flou standard
+   ci-dessus est fiable partout et suffisant pour la lisibilité recherchée. */
 /* profondeur : lumière interne haute + arête */
 .menu-overlay::before {
   content: "";

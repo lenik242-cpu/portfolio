@@ -25,6 +25,12 @@ export default function FloatingNav() {
     return () => lenis.start();
   }, [open, lenis]);
 
+  // Le fond shader derrière le panneau est invisible sous le flou : inutile
+  // de continuer à l'animer pendant que le menu est ouvert.
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent("nr-overlay", { detail: open }));
+  }, [open]);
+
   // Fermeture au clavier (Échap).
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);

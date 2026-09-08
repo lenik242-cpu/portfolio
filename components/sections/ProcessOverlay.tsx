@@ -25,6 +25,12 @@ export default function ProcessOverlay({
     else lenis.start();
   }, [open, lenis]);
 
+  // Le fond shader derrière le panneau est invisible sous le flou : inutile
+  // de continuer à l'animer pendant que le panneau est ouvert.
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent("nr-overlay", { detail: open }));
+  }, [open]);
+
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
