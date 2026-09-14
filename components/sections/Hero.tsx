@@ -41,6 +41,12 @@ export default function Hero() {
       // Hero pin : la vidéo reste fixée en haut d'écran pendant que le reste
       // du site défile par-dessus (une fois le pin relâché, le flux normal
       // reprend). Légère parallaxe (scale) de la vidéo pendant le pin.
+      // pinType "transform" (au lieu du "fixed" par défaut de ScrollTrigger
+      // en scroll natif) : Chrome/Edge/Opera n'incluent pas les éléments en
+      // position: fixed dans le calcul de backdrop-filter d'un panneau situé
+      // au-dessus (le menu plein écran ne peut alors plus flouter le hero
+      // pendant qu'il est épinglé). "transform" produit le même effet visuel
+      // sans passer par position: fixed, donc sans ce problème.
       gsap.to(".hero-video", {
         scale: 1.08,
         ease: "none",
@@ -50,6 +56,7 @@ export default function Hero() {
           end: "+=100%",
           scrub: true,
           pin: true,
+          pinType: "transform",
           anticipatePin: 1,
         },
       });

@@ -80,6 +80,11 @@ export default function Services() {
         end: `+=${N * 85}%`,
         scrub: true,
         pin: true,
+        // "transform" plutôt que le "fixed" par défaut : voir la note
+        // équivalente dans Hero.tsx — position: fixed empêche le panneau
+        // ProcessOverlay (backdrop-filter) de flouter cette section pendant
+        // qu'elle est épinglée, sur Chrome/Edge/Opera.
+        pinType: "transform",
         anticipatePin: 1,
         onUpdate: (self) => {
           const idx = Math.min(N - 1, Math.floor(self.progress * N));
