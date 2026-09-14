@@ -133,15 +133,21 @@ h3,
   background: rgba(5, 7, 14, 0.62);
   backdrop-filter: blur(30px) saturate(135%) brightness(1.02);
   -webkit-backdrop-filter: blur(30px) saturate(135%) brightness(1.02);
+  /* Chrome/Edge desktop (compositeur Windows) peut afficher le flou de façon
+     incohérente si la couche de backdrop-filter n'existe qu'à l'ouverture :
+     will-change force le navigateur à préparer/maintenir cette couche en
+     permanence. pointer-events (au lieu de visibility) garde l'élément peint
+     en continu plutôt que de le retirer puis le réintroduire, ce qui évite
+     un flou "figé" sur certains GPU — comportement observé fiable sur iOS
+     Safari mais pas sur Chrome/Edge desktop avec l'approche visibility. */
+  will-change: backdrop-filter;
   opacity: 0;
-  visibility: hidden;
-  transition:
-    opacity 0.55s cubic-bezier(0.2, 0.7, 0.2, 1),
-    visibility 0.55s;
+  pointer-events: none;
+  transition: opacity 0.55s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 .menu-overlay[data-open="true"] {
   opacity: 1;
-  visibility: visible;
+  pointer-events: auto;
 }
 /* Note : pas de filtre SVG (#liquid-glass) ici, volontairement. Sur un
    panneau plein écran, ce filtre (feTurbulence + feDisplacementMap) doit

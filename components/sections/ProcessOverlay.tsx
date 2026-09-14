@@ -43,21 +43,32 @@ export default function ProcessOverlay({
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   return (
-    <AnimatePresence>
-      {open && (
-        <motion.div
-          role="dialog"
-          aria-modal="true"
-          aria-label="Comment je travaille"
-          className="menu-overlay fixed inset-0 overflow-y-auto px-8 py-24 sm:px-10"
-          data-open="true"
-          style={{ zIndex: 70 }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: reduced ? 0 : 0.5, ease: [0.2, 0.7, 0.2, 1] }}
-        >
-          <div className="mx-auto flex w-full max-w-4xl flex-col gap-14">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-hidden={!open}
+      aria-label="Comment je travaille"
+      data-open={open}
+      className="menu-overlay fixed inset-0 overflow-y-auto px-8 py-24 sm:px-10"
+      style={{ zIndex: 70 }}
+    >
+      {/* Le panneau (fond flouté) reste monté en permanence — voir la note
+          sur .menu-overlay dans globals.css : le démonter/remonter à chaque
+          ouverture (AnimatePresence) forçait Chrome/Edge desktop à recréer
+          la couche de backdrop-filter à chaque fois, avec un flou qui
+          n'apparaissait pas de façon fiable. Seul le contenu interne
+          (sans backdrop-filter, donc sans ce problème) est démonté pour
+          rejouer son animation d'entrée. */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            key="process-content"
+            className="mx-auto flex w-full max-w-4xl flex-col gap-14"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: reduced ? 0 : 0.4, ease: [0.2, 0.7, 0.2, 1] }}
+          >
             <div className="flex items-start justify-between gap-6">
               <div>
                 <p className="mb-4 font-mono text-xs uppercase tracking-[0.32em] text-muted">
@@ -95,9 +106,9 @@ export default function ProcessOverlay({
                 </motion.li>
               ))}
             </ol>
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 }
