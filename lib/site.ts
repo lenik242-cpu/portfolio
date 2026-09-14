@@ -5,8 +5,10 @@ export const SITE = {
   role: "Artiste 3D",
   tagline: "Imagerie produit, animation et expériences visuelles.",
   // URL de production, utilisée pour le sitemap, robots.txt, les balises
-  // Open Graph et les données structurées (JSON-LD).
-  url: "https://nikita-resta.fr",
+  // Open Graph et les données structurées (JSON-LD). Avec www : Vercel
+  // redirige le domaine nu (nikita-resta.fr) vers www en 308 — www est
+  // l'hôte canonique réel, le sitemap doit lister des URLs sur cet hôte.
+  url: "https://www.nikita-resta.fr",
   email: "nikita.resta.pro@gmail.com",
   socials: [
     { label: "ArtStation", href: "https://www.artstation.com/nikitaresta1" },
