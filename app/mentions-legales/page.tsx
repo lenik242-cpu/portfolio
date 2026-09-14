@@ -6,6 +6,7 @@ import { SITE } from "@/lib/site";
 export const metadata: Metadata = {
   title: `Mentions légales · ${SITE.brand}`,
   description: "Mentions légales du site de Nikita Resta.",
+  alternates: { canonical: "/mentions-legales" },
 };
 
 export default function MentionsLegalesPage() {

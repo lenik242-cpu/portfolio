@@ -6,6 +6,7 @@ import { SITE } from "@/lib/site";
 export const metadata: Metadata = {
   title: `Politique de confidentialité · ${SITE.brand}`,
   description: "Politique de confidentialité du site de Nikita Resta.",
+  alternates: { canonical: "/confidentialite" },
 };
 
 export default function ConfidentialitePage() {

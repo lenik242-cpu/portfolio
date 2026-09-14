@@ -7,10 +7,27 @@ import { SITE } from "@/lib/site";
 import { ABOUT_PAGE_CONTENT, HOME_SERVICES, SOFTWARE } from "@/lib/content";
 import { PROCESS } from "@/lib/services";
 
+const TITLE = `À propos · ${SITE.brand}`;
+const DESCRIPTION =
+  "Nikita Resta, artiste 3D freelance spécialisé en imagerie produit et character design, aussi à l'aise sur un site web que sur un rendu.";
+
 export const metadata: Metadata = {
-  title: `À propos · ${SITE.brand}`,
-  description:
-    "Artiste 3D freelance spécialisé en imagerie produit et character design, aussi à l'aise sur un site web que sur un rendu.",
+  title: TITLE,
+  description: DESCRIPTION,
+  alternates: { canonical: "/about" },
+  openGraph: {
+    title: TITLE,
+    description: DESCRIPTION,
+    url: "/about",
+    type: "profile",
+    images: [{ url: "/about.jpg", width: 3024, height: 4032, alt: SITE.brand }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description: DESCRIPTION,
+    images: ["/about.jpg"],
+  },
 };
 
 export default function AboutPage() {

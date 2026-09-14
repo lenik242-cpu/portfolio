@@ -63,6 +63,18 @@ export const WEBSITES: Website[] = [
     width: 1869,
     height: 969,
   },
+  {
+    slug: "meridien",
+    name: "Atelier Méridien",
+    url: "https://ateliermeridien.vercel.app",
+    tag: "Architecture & mobilier sur-mesure",
+    category: "Site vitrine · Architecture & design",
+    description:
+      "Une agence d'architecture et de fabrication sur-mesure, entre bâti et mobilier. Direction artistique épurée et contemporaine, portfolio de projets pensés pour durer, matières nobles mises en avant par une mise en page sobre et précise.",
+    image: "/websites/meridien.webp",
+    width: 1919,
+    height: 1079,
+  },
 ];
 
 export function getWebsite(slug: string): Website | undefined {

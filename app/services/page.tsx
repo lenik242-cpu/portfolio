@@ -6,10 +6,21 @@ import PageShaderBackground from "@/components/layout/PageShaderBackground";
 import { SITE } from "@/lib/site";
 import { SERVICES, PROCESS } from "@/lib/services";
 
+const TITLE = `Services · ${SITE.brand}`;
+const DESCRIPTION =
+  "Services 3D de Nikita Resta : modélisation, personnages, visualisation produit, texturing, real-time, et création de sites web assistée par IA.";
+
 export const metadata: Metadata = {
-  title: `Services · ${SITE.brand}`,
-  description:
-    "Services 3D : modélisation, personnages, visualisation produit, texturing, real-time, et création de sites web assistée par IA.",
+  title: TITLE,
+  description: DESCRIPTION,
+  alternates: { canonical: "/services" },
+  openGraph: {
+    title: TITLE,
+    description: DESCRIPTION,
+    url: "/services",
+    type: "website",
+  },
+  twitter: { card: "summary_large_image", title: TITLE, description: DESCRIPTION },
 };
 
 export default function ServicesPage() {

@@ -42,9 +42,60 @@ const instrumentSerif = Instrument_Serif({
   style: ["normal", "italic"],
 });
 
+const TITLE = "Nikita Resta — Artiste 3D | Imagerie produit & visualisation";
+const DESCRIPTION =
+  "Nikita Resta, artiste 3D freelance en France. Imagerie produit, character design, visualisation e-commerce et sites web sur-mesure — du concept au rendu final.";
+
 export const metadata: Metadata = {
-  title: `${SITE.brand} · ${SITE.role}`,
-  description: SITE.tagline,
+  metadataBase: new URL(SITE.url),
+  title: TITLE,
+  description: DESCRIPTION,
+  alternates: { canonical: "/" },
+  openGraph: {
+    title: TITLE,
+    description: DESCRIPTION,
+    url: "/",
+    siteName: SITE.brand,
+    locale: "fr_FR",
+    type: "website",
+    images: [{ url: "/og-image.jpg", width: 1200, height: 630, alt: TITLE }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description: DESCRIPTION,
+    images: ["/og-image.jpg"],
+  },
+  robots: { index: true, follow: true },
+};
+
+// Données structurées (JSON-LD) : identifie Nikita Resta comme personne et
+// comme prestataire de service 3D/web freelance auprès de Google.
+const personId = `${SITE.url}/#person`;
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": personId,
+      name: SITE.brand,
+      url: SITE.url,
+      jobTitle: SITE.role,
+      description: SITE.tagline,
+      email: `mailto:${SITE.email}`,
+      image: `${SITE.url}/about.jpg`,
+      sameAs: SITE.socials.map((s) => s.href),
+    },
+    {
+      "@type": "ProfessionalService",
+      "@id": `${SITE.url}/#service`,
+      name: `${SITE.brand} — ${SITE.role}`,
+      url: SITE.url,
+      description: DESCRIPTION,
+      areaServed: "FR",
+      provider: { "@id": personId },
+    },
+  ],
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -55,6 +106,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
     >
       <body className="min-h-full">
+        <script
+          type="application/ld+json"
+          // eslint-disable-next-line @typescript-eslint/naming-convention -- dangerouslySetInnerHTML est le nom imposé par React.
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <Background />
         <CustomCursor />
         <LiquidGlassFilter />

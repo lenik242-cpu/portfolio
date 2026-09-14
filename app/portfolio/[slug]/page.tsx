@@ -20,9 +20,24 @@ export async function generateMetadata({
   const { slug } = await params;
   const project = getProject(slug);
   if (!project) return { title: `Projet · ${SITE.brand}` };
+  const title = `${project.title} · ${SITE.brand}`;
   return {
-    title: `${project.title} · ${SITE.brand}`,
+    title,
     description: project.summary,
+    alternates: { canonical: `/portfolio/${slug}` },
+    openGraph: {
+      title,
+      description: project.summary,
+      url: `/portfolio/${slug}`,
+      type: "article",
+      images: [{ url: project.hero, alt: project.title }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description: project.summary,
+      images: [project.hero],
+    },
   };
 }
 

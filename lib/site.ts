@@ -4,6 +4,10 @@ export const SITE = {
   brand: "Nikita Resta", // ← nom / marque affiché dans la nav, le hero et le footer
   role: "Artiste 3D",
   tagline: "Imagerie produit, animation et expériences visuelles.",
+  // ⚠️ URL de production, utilisée pour le sitemap, robots.txt, les balises
+  // Open Graph et les données structurées (JSON-LD). À remplacer par le nom
+  // de domaine définitif dès qu'il est connecté sur Vercel.
+  url: "https://nikita-resta.vercel.app",
   email: "nikita.resta.pro@gmail.com",
   socials: [
     { label: "ArtStation", href: "https://www.artstation.com/nikitaresta1" },

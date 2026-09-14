@@ -20,9 +20,24 @@ export async function generateMetadata({
   const { slug } = await params;
   const site = getWebsite(slug);
   if (!site) return { title: `Site web · ${SITE.brand}` };
+  const title = `${site.name} · ${SITE.brand}`;
   return {
-    title: `${site.name} · ${SITE.brand}`,
-    description: site.tag,
+    title,
+    description: site.description,
+    alternates: { canonical: `/web/${slug}` },
+    openGraph: {
+      title,
+      description: site.description,
+      url: `/web/${slug}`,
+      type: "article",
+      images: [{ url: site.image, width: site.width, height: site.height, alt: site.name }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description: site.description,
+      images: [site.image],
+    },
   };
 }
 

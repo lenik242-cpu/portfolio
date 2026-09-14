@@ -6,9 +6,21 @@ import PortfolioGallery from "@/components/portfolio/PortfolioGallery";
 import PageShaderBackground from "@/components/layout/PageShaderBackground";
 import { SITE } from "@/lib/site";
 
+const TITLE = `Portfolio · ${SITE.brand}`;
+const DESCRIPTION =
+  "Sélection complète de projets 3D de Nikita Resta : personnages, modélisation, visualisation produit et environnements.";
+
 export const metadata: Metadata = {
-  title: `Portfolio · ${SITE.brand}`,
-  description: "Sélection complète de projets 3D : personnages, modélisation, produit et environnements.",
+  title: TITLE,
+  description: DESCRIPTION,
+  alternates: { canonical: "/portfolio" },
+  openGraph: {
+    title: TITLE,
+    description: DESCRIPTION,
+    url: "/portfolio",
+    type: "website",
+  },
+  twitter: { card: "summary_large_image", title: TITLE, description: DESCRIPTION },
 };
 
 export default function PortfolioPage() {
