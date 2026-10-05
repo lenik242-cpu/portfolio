@@ -75,6 +75,18 @@ export const WEBSITES: Website[] = [
     width: 1919,
     height: 1079,
   },
+  {
+    slug: "onyx",
+    name: "ONYX",
+    url: "https://onyx-project-iota.vercel.app",
+    tag: "Tattoo studio / black & grey realism",
+    category: "Site vitrine · Tatouage",
+    description:
+      "Un studio de tatouage spécialisé dans le réalisme noir & gris, présenté comme une galerie d'art. Clair-obscur cinématographique, serif éditoriale à fort contraste, portfolio mis en scène pièce par pièce. Le noir domine, un rouge sang n'apparaît qu'en signature — l'encre comme mémoire.",
+    image: "/websites/onyx.webp",
+    width: 1920,
+    height: 1080,
+  },
 ];
 
 export function getWebsite(slug: string): Website | undefined {
